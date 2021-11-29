@@ -28,6 +28,7 @@ function getBrowserName(): string {
         return 'Safari';
     } else if(navigator.userAgent.indexOf("Firefox") != -1 ){
         return 'Firefox';
+		//@ts-ignore
     } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) {
         return 'Internet Explorer';
     } else {
