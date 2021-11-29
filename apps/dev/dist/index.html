@@ -2,9 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/assets/favicon.17e50649.svg" />
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite App</title>
+		<title>Houdini Components</title>
 		<style>
 			html, body {
 				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -14,8 +14,14 @@
 				background-color: var(--neutral-layer-2);
 			}
 
+			.content-container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
 			houdini-card {
-				width: max-content;
+				width: 600px;
 				height: 400px;
 				margin: 1.15rem;
 				padding: 1rem;
@@ -27,7 +33,6 @@
 			}
 
 			.masonry-container {
-				width: max-content;
 				height: max-content;
 			}
 
@@ -38,7 +43,6 @@
 			}
 
 			.quadtree-container {
-				width: max-content;
 				height: max-content;
 			}
 
@@ -47,7 +51,6 @@
 				--qt-grid-gap: 10;
 				display: layout(quadtree);
 				height: 800px;
-				width: 800px;
 			}
 
 			.block {
@@ -56,76 +59,118 @@
 				height: 20px;
 				background-color: var(--accent-fill-rest);
 			}
+
+			.x2 {
+				height: 40px;
+			}
+
+			.x3 {
+				height: 60px;
+			}
+
+			.x4 {
+				height: 80px;
+			}
+
+			.x5 {
+				height: 100px;
+			}
+
+			.triangle {
+				background-image: paint(polygon);
+				--polygon-sides: 3;
+				--polygon-radius: 12;
+				--polygon-color: cornflowerblue;
+				--polygon-scale: 60;
+				--polygon-rounded: true;
+			}
 		</style>
-		<script type="module" crossorigin src="/assets/index.cc803337.js"></script>
-		<link rel="modulepreload" href="/assets/vendor.fd35c0d6.js">
+		<script type="module" crossorigin src="/assets/index.c87f97cb.js"></script>
+		<link rel="modulepreload" href="/assets/vendor.f9ee0f77.js">
 	</head>
 
 	<body>
 		<houdini-toolbar>
 			<houdini-switch id="mode-toggle">Toggle light/dark mode</houdini-switch>
 		</houdini-toolbar>
-		<houdini-card>
-			<h2>Shapes using paint worklet</h2>
-			<houdini-divider></houdini-divider>
-			<houdini-shape color="cornflowerblue" sides="3" radius="12" scale="60" rounded></houdini-shape>
-			<houdini-shape color="lightgrey" sides="7" radius="0" scale="60" rounded></houdini-shape>
-			<houdini-shape color="lightsalmon" sides="5" radius="6" scale="60" rotation="90" rounded></houdini-shape>
-		</houdini-card>
-		<houdini-card class="masonry-container">
-			<h2>Masonry layout worklet</h2>
-			<houdini-divider></houdini-divider>
-			<div class="masonry">
-				<img src="https://placeimg.com/300/300/nature/grayscale">
-				<img src="https://placeimg.com/400/600/nature/grayscale">
-				<img src="https://placeimg.com/200/600/nature/grayscale">
-				<img src="https://placeimg.com/300/400/nature/grayscale">
-				<img src="https://placeimg.com/500/500/nature/grayscale">
-				<img src="https://placeimg.com/300/300/nature/grayscale">
-				<img src="https://placeimg.com/400/600/nature/grayscale">
-				<img src="https://placeimg.com/200/600/nature/grayscale">
-				<img src="https://placeimg.com/300/400/nature/grayscale">
-				<img src="https://placeimg.com/500/500/nature/grayscale">
-				<img src="https://placeimg.com/300/300/nature/grayscale">
-				<img src="https://placeimg.com/400/600/nature/grayscale">
-				<img src="https://placeimg.com/200/600/nature/grayscale">
-				<img src="https://placeimg.com/300/400/nature/grayscale">
-				<img src="https://placeimg.com/500/500/nature/grayscale">
-			</div>
-		</houdini-card>
-		<houdini-card class="quadtree-container">
-			<h2>Quadtree layout worklet</h2>
-			<houdini-divider></houdini-divider>
-			<div class="quadtree">
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-			</div>
-		</houdini-card>
+		<div class="content-container">
+			<houdini-card>
+				<h2>Shapes using paint worklet</h2>
+				<houdini-divider></houdini-divider>
+				<houdini-shape color="cornflowerblue" sides="3" radius="12" scale="60" rounded></houdini-shape>
+				<houdini-shape color="lightgrey" sides="7" radius="0" scale="60" rounded></houdini-shape>
+				<houdini-shape color="lightsalmon" sides="5" radius="6" scale="60" rotation="90" rounded></houdini-shape>
+				<div class="triangle"></div>
+			</houdini-card>
+			<houdini-card id="masonry" class="masonry-container">
+				<h2>Masonry layout worklet</h2>
+				<houdini-divider></houdini-divider>
+				<div class="masonry">
+					<div class="block x2"></div>
+					<div class="block x4"></div>
+					<div class="block x3"></div>
+					<div class="block x5"></div>
+					<div class="block x2"></div>
+					<div class="block x4"></div>
+					<div class="block x5"></div>
+					<div class="block x5"></div>
+					<div class="block x5"></div>
+					<div class="block x2"></div>
+					<div class="block x4"></div>
+					<div class="block x3"></div>
+					<div class="block x3"></div>
+					<div class="block x2"></div>
+					<div class="block x3"></div>
+					<div class="block x5"></div>
+					<div class="block x2"></div>
+					<div class="block x5"></div>
+					<div class="block x3"></div>
+					<div class="block x4"></div>
+					<div class="block x4"></div>
+					<div class="block x4"></div>
+					<div class="block x2"></div>
+					<div class="block x4"></div>
+					<div class="block x5"></div>
+					<div class="block x2"></div>
+					<div class="block x2"></div>
+				</div>
+			</houdini-card>
+			<houdini-card id="quadtree" class="quadtree-container">
+				<h2>Quadtree layout worklet</h2>
+				<div>Very expermental, you may need to refresh your browser a few times before it works.</div>
+				<houdini-divider></houdini-divider>
+				<div class="quadtree">
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+					<div class="block"></div>
+				</div>
+			</houdini-card>
+		</div>
 		
+		<script src="https://unpkg.com/css-paint-polyfill"></script>
 	</body>
 </html>
