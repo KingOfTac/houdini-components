@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "outDir": "dist/esm",
+        "useDefineForClassFields": false,
+        "strict": false,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "module": "ESNext",
+        "types": [
+            "webpack-env"
+        ],
+        "lib": [
+            "DOM",
+            "ES2015",
+            "ES2016.Array.Include"
+        ],
+        "baseUrl": "/quadtree-worklet/",
+        "paths": {
+            "@kingoftac/worklet-utilities": ["../worklet-utilites/dist/index.js"]
+        }
+    },
+    "include": ["src"]
+}

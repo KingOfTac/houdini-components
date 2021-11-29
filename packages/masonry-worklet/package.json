@@ -1,0 +1,57 @@
+{
+	"name": "@kingoftac/masonry-worklet",
+	"description": "CSS Layout Worklet that can create masonry layouts",
+	"sideEffects": false,
+	"version": "0.0.0",
+	"author": {
+		"name": "Nathan Brown",
+		"url": ""
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kingoftac/projects.git"
+	},
+	"main": "dist/esm/index.js",
+	"types": "dist/masonry-worklet.d.ts",
+	"unpkg": "dist/masonry-worklet.min.js",
+	"scripts": {
+		"clean:dist": "node ../../build/clean.js dist",
+		"doc": "api-extractor run --local",
+		"doc:ci": "api-extractor run",
+		"build:rollup": "rollup -c",
+		"build:tsc": "tsc -p ./tsconfig.json",
+		"build": "yarn build:tsc && yarn build:rollup && yarn doc",
+		"dev": "tsc -p ./tsconfig.json -w",
+		"prepare": "yarn clean:dist && yarn build",
+		"prettier": "prettier --config ../../.prettierrc --write \"**/*.ts\"",
+		"prettier:diff": "prettier --config ../../.prettierrc \"**/*.ts\" --list-different"
+	},
+	"devDependencies": {
+		"@microsoft/api-extractor": "7.18.16",
+		"@types/webpack-env": "^1.16.3",
+		"esm": "^3.2.25",
+		"ignore-loader": "^0.1.2",
+		"lodash-es": "4.17.21",
+		"prettier": "2.3.0",
+		"rollup": "^2.56.2",
+		"rollup-plugin-commonjs": "^10.1.0",
+		"rollup-plugin-filesize": "^8.0.2",
+		"rollup-plugin-node-resolve": "^5.2.0",
+		"rollup-plugin-terser": "^5.3.1",
+		"rollup-plugin-transform-tagged-template": "^0.0.3",
+		"rollup-plugin-typescript2": "^0.27.3",
+		"source-map": "^0.7.3",
+		"source-map-loader": "^0.2.4",
+		"ts-loader": "^7.0.5",
+		"ts-node": "^8.10.2",
+		"tsconfig-paths": "^3.10.1",
+		"typescript": "^3.9.10",
+		"webpack": "^4.46.0"
+	},
+	"dependencies": {
+		"@kingoftac/worklet-utilities": "^0.0.0",
+		"@microsoft/tsdoc-config": "^0.13.9",
+		"tslib": "^1.14.1"
+	}
+}

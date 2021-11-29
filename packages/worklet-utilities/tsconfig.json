@@ -1,0 +1,17 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "strictNullChecks": true,
+        "experimentalDecorators": true,
+        "target": "ES6",
+        "module": "ESNext",
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "declaration": true,
+        "types": [
+            "webpack-env"
+        ],
+    },
+    "include": ["src"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "houdini-components",
+  "packageManager": "yarn@3.1.1",
+  "version": "0.0.1",
+  "author": {
+    "name": "Nathan Brown"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ]
+  },
+  "devDependencies": {
+    "typescript": "^4.5.2"
+  }
+}

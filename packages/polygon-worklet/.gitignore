@@ -1,0 +1,5 @@
+.rollupcache
+coverage
+tsdoc-metadata.json
+temp
+node_modules

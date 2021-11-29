@@ -1,0 +1,26 @@
+{
+  "name": "dev-server",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5",
+    "vite": "^2.6.11"
+  },
+  "dependencies": {
+    "@kingoftac/masonry-worklet": "workspace:*",
+    "@kingoftac/polygon-worklet": "workspace:*",
+    "@kingoftac/quadtree-worklet": "workspace:*",
+    "@microsoft/fast-colors": "^5.1.4",
+    "@microsoft/fast-components": "^2.16.5",
+    "@microsoft/fast-element": "^1.6.2",
+    "@microsoft/fast-foundation": "^2.27.0",
+    "@microsoft/fast-router": "^0.2.11",
+    "@microsoft/fast-web-utilities": "^5.0.2",
+    "css-paint-polyfill": "^3.3.0",
+    "lodash-es": "^4.17.21"
+  }
+}
