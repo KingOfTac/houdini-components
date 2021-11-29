@@ -2,6 +2,7 @@ import commonJS from "rollup-plugin-commonjs";
 import filesize from "rollup-plugin-filesize";
 import resolve from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 import rollup from 'rollup';
 rollup;
 import transformTaggedTemplate from "rollup-plugin-transform-tagged-template";
@@ -31,7 +32,10 @@ export default [
             },
         ],
         plugins: [
-            resolve(),
+            nodePolyfills(),
+            resolve({
+                preferBuiltins: true
+            }),
             commonJS(),
             typescript({
                 tsconfigOverride: {

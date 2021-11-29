@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -900,6 +898,8 @@ var tychei = createCommonjsModule(function (module) {
   );
 });
 
+var require$$0 = {};
+
 var seedrandom$1 = createCommonjsModule(function (module) {
   /*
   Copyright 2019 David Bau.
@@ -1171,7 +1171,7 @@ var seedrandom$1 = createCommonjsModule(function (module) {
       module.exports = seedrandom; // When in node.js, try using crypto package for autoseeding.
 
       try {
-        nodecrypto = crypto;
+        nodecrypto = require$$0;
       } catch (ex) {}
     } else {
       // When included as a plain script, set up Math.seedrandom global.

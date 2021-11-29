@@ -53,6 +53,7 @@
 	"dependencies": {
 		"@kingoftac/worklet-utilities": "workspace:*",
 		"@microsoft/tsdoc-config": "^0.13.9",
+		"rollup-plugin-node-polyfills": "^0.2.1",
 		"seedrandom": "^3.0.5",
 		"ts-lib": "^0.0.5",
 		"tslib": "^1.14.1"
