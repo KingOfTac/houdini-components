@@ -12,6 +12,13 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
+function __decorate(decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
 function __awaiter(thisArg, _arguments, P, generator) {
   function adopt(value) {
     return value instanceof P ? value : new P(function (resolve) {
@@ -91,44 +98,113 @@ function createProperties(prefix, props) {
   });
 }
 
+/**
+ * Layout Worklet Definitions
+ *
+ * @remarks
+*/
+
+var ChildDisplayType;
+
+(function (ChildDisplayType) {
+  ChildDisplayType["block"] = "block";
+  ChildDisplayType["normal"] = "normal";
+})(ChildDisplayType || (ChildDisplayType = {}));
+
+var LayoutSizingMode;
+
+(function (LayoutSizingMode) {
+  LayoutSizingMode["blockLike"] = "block-like";
+  LayoutSizingMode["manual"] = "manual";
+})(LayoutSizingMode || (LayoutSizingMode = {}));
+
+var BlockFragmentationType;
+
+(function (BlockFragmentationType) {
+  BlockFragmentationType["none"] = "none";
+  BlockFragmentationType["page"] = "page";
+  BlockFragmentationType["column"] = "column";
+  BlockFragmentationType["region"] = "region";
+})(BlockFragmentationType || (BlockFragmentationType = {}));
+
+var BreakType;
+
+(function (BreakType) {
+  BreakType["none"] = "none";
+  BreakType["line"] = "line";
+  BreakType["page"] = "page";
+  BreakType["column"] = "column";
+  BreakType["region"] = "region";
+})(BreakType || (BreakType = {}));
+class FragmentResultOptions {}
+class IntrinsicSizesResultOptions {}
+class LayoutDefinition {
+  layout(children, edges, constraints, styleMap) {
+    return __awaiter(this, void 0, void 0, function* () {
+      return new FragmentResultOptions();
+    });
+  }
+
+  intrinsicSizes(children, edges, styleMap) {
+    return __awaiter(this, void 0, void 0, function* () {
+      return new IntrinsicSizesResultOptions();
+    });
+  }
+
+}
+
+function CSSLayout(name) {
+  return function (type) {
+    if (!type.prototype.layout || !type.prototype.intrinsicSizes) {
+      type = LayoutDefinition;
+    } // @ts-ignore
+
+
+    registerLayout(name, type);
+  };
+}
+
 const prefix = 'masonry';
-createProperties(prefix, [{
-  name: 'color',
-  type: 'string'
+const props = createProperties(prefix, [{
+  name: 'gaps',
+  type: 'number',
+  default: 10
 }, {
-  name: 'sides',
-  type: 'number'
-}, {
-  name: 'rotation',
-  type: 'number'
-}, {
-  name: 'radius',
-  type: 'number'
-}, {
-  name: 'rounded',
-  type: 'boolean'
+  name: 'columns',
+  type: 'number',
+  default: 3
 }]);
+/**
+ * CSS Layout Worklet to produce masonry columns
+ *
+ * @remarks
+ *
+ * @alpha
+ */
 
-class MasonryLayout {
+let MasonryLayout = class MasonryLayout {
   static get inputProperties() {
-    return ['--padding', '--columns'];
-  } // @ts-ignore
+    return props.variableStrings;
+  }
 
+  static get childInputProperties() {
+    return [];
+  }
 
   intrinsicSizes() {
     return __awaiter(this, void 0, void 0, function* () {});
   }
 
-  layout(children, edges, constraints, styleMap) {
+  layout(children, edges, constraints, styleMap, breaktoken) {
     return __awaiter(this, void 0, void 0, function* () {
+      const config = {};
       const inlineSize = constraints.fixedInlineSize - edges.inline;
-      const padding = parseInt(styleMap.get('--padding').toString());
-      const columnValue = styleMap.get('--columns').toString();
-      let columns = parseInt(columnValue);
-
-      if (columnValue == 'auto' || !columns) {
-        columns = Math.ceil(inlineSize / 350);
-      }
+      props.propsMap.forEach(prop => config[prop.name] = prop.value(styleMap.get(prop.variable)) || prop.default);
+      console.log(config);
+      const padding = config.gaps;
+      let columns = config.columns; // if (columnValue == 'auto' || !columns) {
+      // 	columns = Math.ceil(inlineSize / 350);
+      // }
 
       const childInlineSize = (inlineSize - (columns + 1) * padding) / columns;
       const childFragments = yield Promise.all(children.map(child => {
@@ -152,12 +228,9 @@ class MasonryLayout {
         }, {
           val: +Infinity,
           idx: -1
-        }); // @ts-ignore
-
-        childFragment.inlineOffset = padding + (childInlineSize + padding) * min.idx; // @ts-ignore
-
-        childFragment.blockOffset = padding + min.val; // @ts-ignore
-
+        });
+        childFragment.inlineOffset = padding + (childInlineSize + padding) * min.idx;
+        childFragment.blockOffset = padding + min.val;
         columnOffsets[min.idx] = childFragment.blockOffset + childFragment.blockSize;
         autoBlockSize = Math.max(autoBlockSize, columnOffsets[min.idx] + padding);
       }
@@ -169,7 +242,11 @@ class MasonryLayout {
     });
   }
 
-} // @ts-ignore
+};
+MasonryLayout.LayoutOptions = {
+  childDisplay: ChildDisplayType.normal,
+  sizing: LayoutSizingMode.blockLike
+};
+MasonryLayout = __decorate([CSSLayout('masonry')], MasonryLayout);
 
-
-registerLayout('masonry', MasonryLayout);
+export { MasonryLayout };

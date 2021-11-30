@@ -3,7 +3,7 @@ import { registerTokens } from '../utility';
 
 const prefix = 'polygon';
 const names:TokenPair[] = [
-	['color','black'],
+	['color','#000'],
 	['sides',3],
 	['rotation',0],
 	['radius',0],

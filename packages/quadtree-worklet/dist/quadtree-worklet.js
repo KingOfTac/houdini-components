@@ -1384,13 +1384,13 @@ class Quadtree {
 
 }
 
-const prefix = 'qt';
+const prefix = 'quadtree';
 const props = createProperties(prefix, [{
   name: 'points',
   type: 'number',
   default: 100
 }, {
-  name: 'gap',
+  name: 'gaps',
   type: 'number',
   default: 5
 }, {
@@ -1516,7 +1516,7 @@ let QuadtreeLayout = class QuadtreeLayout {
   layout(children, edges, constraints, styleMap, breakToken) {
     return __awaiter(this, void 0, void 0, function* () {
       const config = {};
-      props.propsMap.forEach(prop => config[prop.name] = prop.value(styleMap.get(prop.variable)) | prop.default);
+      props.propsMap.forEach(prop => config[prop.name] = prop.value(styleMap.get(prop.variable)) || prop.default);
       console.log(config);
       const availableInlineSize = constraints.fixedInlineSize - edges.inline;
       const availableBlockSize = constraints.fixedBlockSize ? constraints.fixedBlockSize - edges.block : availableInlineSize;
@@ -1540,10 +1540,10 @@ let QuadtreeLayout = class QuadtreeLayout {
           bounds
         }) => {
           return Object.assign({
-            x: bounds.x + config.gap,
-            y: bounds.y + config.gap,
-            width: bounds.width - config.gap,
-            height: bounds.height - config.gap
+            x: bounds.x + config.gaps,
+            y: bounds.y + config.gaps,
+            width: bounds.width - config.gaps,
+            height: bounds.height - config.gaps
           }, getGridArea(bounds, colSize, rowSize));
         })
       }; // const unconstrainedSizes: number[] = [];

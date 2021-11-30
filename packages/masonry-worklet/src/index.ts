@@ -1,31 +1,66 @@
-import { createProperties } from '@kingoftac/worklet-utilities';
+import {
+	createProperties,
+	FragmentResultOptions,
+	LayoutOptions,
+	ChildDisplayType,
+	LayoutSizingMode,
+	CSSLayout,
+	BreakToken
+} from '@kingoftac/worklet-utilities';
+import type {
+	StylePropertyMapReadOnly,
+	LayoutEdges,
+	LayoutChild,
+	LayoutConstraintOptions
+} from '@kingoftac/worklet-utilities';
 
 const prefix:string = 'masonry';
 const props = createProperties(prefix, [
-	{ name: 'color', type: 'string' },
-	{ name: 'sides', type: 'number' },
-	{ name: 'rotation', type: 'number' },
-	{ name: 'radius', type: 'number' },
-	{ name: 'rounded', type: 'boolean' }
+	{ name: 'gaps', type: 'number', default: 10 },
+	{ name: 'columns', type: 'number', default: 3 },
 ]);
 
-class MasonryLayout {
-	static get inputProperties() {
-		return ['--padding', '--columns'];
+/**
+ * CSS Layout Worklet to produce masonry columns
+ * 
+ * @remarks
+ * 
+ * @alpha
+ */
+
+@CSSLayout('masonry')
+export class MasonryLayout {
+	static LayoutOptions: LayoutOptions = {
+		childDisplay: ChildDisplayType.normal,
+		sizing: LayoutSizingMode.blockLike
 	}
 
-	// @ts-ignore
+	static get inputProperties() {
+		return props.variableStrings;
+	}
+
+	static get childInputProperties() {
+		return [];
+	}
+
 	async intrinsicSizes() {  }
-	async layout(children, edges, constraints, styleMap) {
+
+	async layout(
+		children: LayoutChild[], 
+		edges: LayoutEdges, 
+		constraints: LayoutConstraintOptions, 
+		styleMap: StylePropertyMapReadOnly, 
+		breaktoken: BreakToken
+	): Promise<FragmentResultOptions> {
+		const config: any = {};
 		const inlineSize = constraints.fixedInlineSize - edges.inline;
 
-		const padding = parseInt(styleMap.get('--padding').toString());
-		const columnValue = styleMap.get('--columns').toString();
+		props.propsMap.forEach((prop: any) => config[prop.name] = prop.value(styleMap.get(prop.variable)) || prop.default);
 
-		let columns = parseInt(columnValue);
-		if (columnValue == 'auto' || !columns) {
-			columns = Math.ceil(inlineSize / 350);
-		}
+		console.log(config);
+
+		const padding = config.gaps;
+		let columns= config.columns
 
 		const childInlineSize = (inlineSize - ((columns + 1) * padding)) / columns;
 		const childFragments = await Promise.all(children.map(child => {
@@ -43,12 +78,9 @@ class MasonryLayout {
 				return acc;
 			}, { val: +Infinity, idx: -1 });
 
-			// @ts-ignore
 			childFragment.inlineOffset = padding + (childInlineSize + padding) * min.idx;
-			// @ts-ignore
 			childFragment.blockOffset = padding + min.val;
 
-			// @ts-ignore
 			columnOffsets[min.idx] = childFragment.blockOffset + childFragment.blockSize;
 			autoBlockSize = Math.max(autoBlockSize, columnOffsets[min.idx] + padding);
 		}
@@ -56,6 +88,3 @@ class MasonryLayout {
 		return { autoBlockSize, childFragments };
 	}
 }
-
-// @ts-ignore
-registerLayout('masonry', MasonryLayout);

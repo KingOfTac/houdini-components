@@ -6,8 +6,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Houdini Components</title>
 		<style>
+			houdini-switch:not(:defined),
+			houdini-card:not(:defined) {
+				visibility: hidden;
+			}
+
 			html, body {
+				margin: 0;
+				padding: 0;
 				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			}
+
+			h1, h2, h3, h4, h5, h6 {
+				margin: 0;
 			}
 
 			body {
@@ -23,6 +34,7 @@
 			}
 
 			houdini-card {
+				--elevation: 11;
 				width: 80%;
 				height: max-content;
 				margin: 1.15rem;
@@ -30,18 +42,44 @@
 				color: var(--neutral-foreground-rest);
 			}
 
-			houdini-card > h2 {
-				margin: 0;
-			}
-
 			.masonry-container {
 				height: max-content;
 			}
 
+			houdini-number-field,
+			#shape-color {
+				display: block;
+				width: 30%;
+			}
+
+			#shape-position-x,
+			#shape-position-y {
+				display: inline-block;
+			}
+
+			houdini-number-field,
+			houdini-slider,
+			houdini-checkbox,
+			#shape-color {
+				margin-bottom: 1rem;
+			}
+
+			fieldset {
+				margin: 0;
+				border: unset;
+				padding: 0;
+			}
+
+			houdini-checkbox {
+				display: flex;
+			}
+
 			.masonry {
-				--columns: 3;
-				--padding: 10;
 				display: layout(masonry);
+			}
+
+			.masonry .block {
+				height: calc(var(--random-height) * 1px);
 			}
 
 			.quadtree-container {
@@ -49,8 +87,6 @@
 			}
 
 			.quadtree {
-				--qt-points: 100;
-				--qt-grid-gap: 10;
 				display: layout(quadtree);
 				height: 800px;
 			}
@@ -60,106 +96,175 @@
 				width: 20px;
 				height: 20px;
 				background-color: var(--accent-fill-rest);
+				padding: 4px;
+				color: var(--foreground-on-accent-rest);
+				border-radius: calc(var(--control-corner-radius) * 1px);
 			}
 
-			.x2 {
-				height: 40px;
+			#shape-color {
+				border-radius: calc(var(--control-corner-radius) * 1px);
+				width: 150px;
+				height: calc((var(--base-height-multiplier) + var(--density)) * var(--design-unit) * 1px);
+				border: calc(var(--stroke-width) * 1px) solid var(--neutral-stroke-rest);
+				padding: 0;
+				display: flex;
+				align-items: center;
 			}
 
-			.x3 {
-				height: 60px;
+			#shape-color input {
+				border: unset;
+				padding: 0;
+				margin: 0;
+				background-color: #0000;
 			}
 
-			.x4 {
-				height: 80px;
+			#shape-color input::-webkit-color-swatch-wrapper {
+				background-color: #0000;
+				padding: 0;
+				margin: 0;
 			}
 
-			.x5 {
-				height: 100px;
+			#shape-color input::-webkit-color-swatch {
+				border-radius: calc(var(--control-corner-radius) * 1px);
+				width: calc(((var(--base-height-multiplier) + var(--density)) * var(--design-unit) - 1) * 1px);
+				height: calc(((var(--base-height-multiplier) + var(--density)) * var(--design-unit) - 1) * 1px);
+				border: unset;
+				flex: unset;
+				align-self: center;
 			}
 		</style>
-		<script type="module" crossorigin src="/assets/index.946d6fb5.js"></script>
-		<link rel="modulepreload" href="/assets/vendor.fd35c0d6.js">
+		<script type="module" crossorigin src="/assets/index.b1f84f50.js"></script>
+		<link rel="modulepreload" href="/assets/vendor.9073e411.js">
 	</head>
 
 	<body>
 		<houdini-toolbar>
-			<houdini-switch id="mode-toggle">Toggle light/dark mode</houdini-switch>
+			<houdini-switch id="mode-toggle"></houdini-switch>
 		</houdini-toolbar>
 		<div class="content-container">
 			<div style="margin: 1.15rem; color: var(--neutral-foreground-rest)">Everything on this page is very experimental, you may need to refresh your browser a few times before it works, and it may not work on every browser. Works best on Chromium based browsers with the experimental platform features flag enabled.</div>
 			<houdini-card id="shapes">
 				<h2>Shapes using paint worklet</h2>
 				<houdini-divider></houdini-divider>
-				<houdini-shape id="shape-1" color="cornflowerblue" sides="3" radius="12" scale="60" rounded></houdini-shape>
-				<houdini-shape id="shape-2" color="lightgrey" sides="7" radius="0" scale="60" rounded></houdini-shape>
-				<houdini-shape id="shape-3" color="lightsalmon" sides="5" radius="6" scale="60" rotation="90" rounded></houdini-shape>
+				<label for="#shape-color">Color</label>
+				<div id="shape-color">
+					<input type="color">
+					<div id="shape-color-value"></div>
+				</div>
+				<houdini-checkbox id="shape-rounded">Rounded Corners</houdini-checkbox>
+				<label for="#shape-sides">Sides</label>
+				<houdini-number-field id="shape-sides" min="3" placeholder="sides"></houdini-number-field>
+				<label for="#shape-scale">Scale</label>
+				<houdini-number-field id="shape-scale" min="10" step="10" placeholder="scale"></houdini-number-field>
+				<fieldset>
+					<legend>Position</legend>
+					<houdini-number-field id="shape-position-x" step="10" placeholder="position x"></houdini-number-field>
+					<houdini-number-field id="shape-position-y" step="10" placeholder="position y"></houdini-number-field>
+				</fieldset>
+				<label for="#shape-rotation">Rotation</label>
+				<houdini-slider
+					id="shape-rotation" 
+					placeholder="division points"
+					min="0"
+					max="360"
+					step="10"
+				>
+					<houdini-slider-label position="0">0</houdini-slider-label>
+					<houdini-slider-label position="360">360</houdini-slider-label>
+				</houdini-slider>
+				<label for="#shape-radius">Corner Radius</label>
+				<houdini-slider
+					id="shape-radius" 
+					placeholder="division points"
+					min="0"
+					max="50"
+					step="1"
+				>
+					<houdini-slider-label position="0">0</houdini-slider-label>
+					<houdini-slider-label position="50">50</houdini-slider-label>
+				</houdini-slider>
+				<houdini-divider></houdini-divider>
+				<houdini-shape id="shape-1" color="#d6b57e" sides="3" radius="12" scale="60" rounded></houdini-shape>
 				
 			</houdini-card>
 			<houdini-card id="masonry" class="masonry-container">
 				<h2>Masonry layout worklet</h2>
 				<houdini-divider></houdini-divider>
+				<label for="#masonry-gaps">Gaps Size</label>
+				<houdini-number-field id="masonry-gaps" placeholder="gaps size"></houdini-number-field>
+				<label for="#masonry-columns">Columns</label>
+				<houdini-number-field id="masonry-columns" placeholder="columns"></houdini-number-field>
+				<houdini-divider></houdini-divider>
 				<div class="masonry">
-					<div class="block x2"></div>
-					<div class="block x4"></div>
-					<div class="block x3"></div>
-					<div class="block x5"></div>
-					<div class="block x2"></div>
-					<div class="block x4"></div>
-					<div class="block x5"></div>
-					<div class="block x5"></div>
-					<div class="block x5"></div>
-					<div class="block x2"></div>
-					<div class="block x4"></div>
-					<div class="block x3"></div>
-					<div class="block x3"></div>
-					<div class="block x2"></div>
-					<div class="block x3"></div>
-					<div class="block x5"></div>
-					<div class="block x2"></div>
-					<div class="block x5"></div>
-					<div class="block x3"></div>
-					<div class="block x4"></div>
-					<div class="block x4"></div>
-					<div class="block x4"></div>
-					<div class="block x2"></div>
-					<div class="block x4"></div>
-					<div class="block x5"></div>
-					<div class="block x2"></div>
-					<div class="block x2"></div>
+					<div class="block">1</div>
+					<div class="block">2</div>
+					<div class="block">3</div>
+					<div class="block">4</div>
+					<div class="block">5</div>
+					<div class="block">6</div>
+					<div class="block">7</div>
+					<div class="block">8</div>
+					<div class="block">9</div>
+					<div class="block">10</div>
+					<div class="block">11</div>
+					<div class="block">12</div>
 				</div>
 			</houdini-card>
 			<houdini-card id="quadtree" class="quadtree-container">
 				<h2>Quadtree layout worklet</h2>
 				<houdini-divider></houdini-divider>
+				<label for="#quadtree-points">Total Division Points</label>
+				<houdini-slider
+					id="quadtree-points" 
+					placeholder="division points"
+					min="1"
+					max="1000"
+					step="50"
+					initial-value="100"
+				>
+					<houdini-slider-label position="1">1</houdini-slider-label>
+					<houdini-slider-label position="500">500</houdini-slider-label>
+					<houdini-slider-label position="1000">1000</houdini-slider-label>
+				</houdini-slider>
+				<label for="#quadtree-gaps">Gaps Size</label>
+				<houdini-number-field id="quadtree-gaps" placeholder="gaps size"></houdini-number-field>
+				<label for="#quadtree-objects">Maximum Objects</label>
+				<houdini-number-field id="quadtree-objects" placeholder="max objects"></houdini-number-field>
+				<label for="#quadtree-levels">Maximum Levels</label>
+				<houdini-number-field id="quadtree-levels" placeholder="max levels"></houdini-number-field>
+				<houdini-divider></houdini-divider>
 				<div class="quadtree">
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
-					<div class="block"></div>
+					<div class="block">1</div>
+					<div class="block">2</div>
+					<div class="block">3</div>
+					<div class="block">4</div>
+					<div class="block">5</div>
+					<div class="block">6</div>
+					<div class="block">7</div>
+					<div class="block">8</div>
+					<div class="block">9</div>
+					<div class="block">10</div>
+					<div class="block">11</div>
+					<div class="block">12</div>
+					<div class="block">13</div>
+					<div class="block">14</div>
+					<div class="block">15</div>
+					<div class="block">16</div>
+					<div class="block">17</div>
+					<div class="block">18</div>
+					<div class="block">19</div>
+					<div class="block">20</div>
+					<div class="block">21</div>
+					<div class="block">22</div>
+					<div class="block">23</div>
+					<div class="block">24</div>
+					<div class="block">25</div>
+					<div class="block">26</div>
+					<div class="block">27</div>
+					<div class="block">28</div>
+					<div class="block">29</div>
+					<div class="block">30</div>
+					<div class="block">31</div>
 				</div>
 			</houdini-card>
 		</div>

@@ -6,7 +6,6 @@ import {
 	ChildDisplayType,
 	LayoutSizingMode,
 	CSSLayout,
-	ChildBreakToken,
 	BreakToken
 } from '@kingoftac/worklet-utilities';
 import type {
@@ -22,10 +21,10 @@ import {
 	random
 } from './quadtree/quadtree';
 
-const prefix:string = 'qt';
+const prefix: string = 'quadtree';
 const props = createProperties(prefix, [
 	{ name: 'points', type: 'number', default: 100 },
-	{ name: 'gap', type: 'number', default: 5 },
+	{ name: 'gaps', type: 'number', default: 5 },
 	{ name: 'maxObjects', type: 'number', default: 10 },
 	{ name: 'maxLevels', type: 'number', default: 4 }
 ]);
@@ -59,15 +58,15 @@ function getNodes(node: any) {
 
 function stringToHash(string) {
 	let hash = 0;
-	  
+
 	if (string.length == 0) return hash;
-	  
+
 	for (let i = 0; i < string.length; i++) {
 		let char = string.charCodeAt(i);
 		hash = ((hash << 5) - hash) + char;
 		hash = hash & hash;
 	}
-	  
+
 	return hash;
 }
 
@@ -152,16 +151,22 @@ export class QuadtreeLayout {
 		return { minContentSize, maxContentSize };
 	}
 
-	async layout(children: LayoutChild[], edges: LayoutEdges, constraints: LayoutConstraintOptions, styleMap: StylePropertyMapReadOnly, breakToken: BreakToken): Promise<FragmentResultOptions> {
+	async layout(
+		children: LayoutChild[],
+		edges: LayoutEdges,
+		constraints: LayoutConstraintOptions,
+		styleMap: StylePropertyMapReadOnly,
+		breakToken: BreakToken
+	): Promise<FragmentResultOptions> {
 		const config: any = {};
-		
-		props.propsMap.forEach((prop:any) => config[prop.name] = prop.value(styleMap.get(prop.variable)) | prop.default);
+
+		props.propsMap.forEach((prop: any) => config[prop.name] = prop.value(styleMap.get(prop.variable)) || prop.default);
 
 		console.log(config);
 
 		const availableInlineSize = constraints.fixedInlineSize! - edges.inline;
-        const availableBlockSize = constraints.fixedBlockSize 
-			? constraints.fixedBlockSize - edges.block 
+		const availableBlockSize = constraints.fixedBlockSize
+			? constraints.fixedBlockSize - edges.block
 			: availableInlineSize;
 
 		const qt = createOrGetQuadtree({
@@ -183,12 +188,12 @@ export class QuadtreeLayout {
 			height: availableBlockSize,
 			cols: maxSubdivisions,
 			rows: maxSubdivisions,
-			areas: getNodes(qt).map(({bounds}) => {
+			areas: getNodes(qt).map(({ bounds }) => {
 				return {
-					x: bounds.x + config.gap,
-					y: bounds.y + config.gap,
-					width: bounds.width - config.gap,
-					height: bounds.height - config.gap,
+					x: bounds.x + config.gaps,
+					y: bounds.y + config.gaps,
+					width: bounds.width - config.gaps,
+					height: bounds.height - config.gaps,
 					...getGridArea(bounds, colSize, rowSize)
 				}
 			})

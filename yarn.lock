@@ -128,6 +128,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fluentui/svg-icons@npm:^1.1.152":
+  version: 1.1.152
+  resolution: "@fluentui/svg-icons@npm:1.1.152"
+  checksum: f245fd9496bf90fa69f299bc951d2fb629fa9f1b50c4b5fc2e74f92d0d2cde9df8588fee61b492055dfd886f2ea0d064be732374bc902c8fa332b59ae5a91daa
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -1912,6 +1919,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dev-server@workspace:apps/dev"
   dependencies:
+    "@fluentui/svg-icons": ^1.1.152
     "@kingoftac/masonry-worklet": "workspace:*"
     "@kingoftac/polygon-worklet": "workspace:*"
     "@kingoftac/quadtree-worklet": "workspace:*"

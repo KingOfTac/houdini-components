@@ -1,13 +1,15 @@
 {
-    "extends": "../../../tsconfig.json",
     "compilerOptions": {
-        "declarationDir": "dist/dts",
-        "outDir": "dist/esm",
-        "strictNullChecks": true,
-        "experimentalDecorators": true,
         "target": "es2015",
+        "outDir": "dist/esm",
+        "useDefineForClassFields": false,
+        "strict": false,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
         "module": "ESNext",
-        "importHelpers": true,
         "types": [
             "webpack-env"
         ],
@@ -15,7 +17,11 @@
             "DOM",
             "ES2015",
             "ES2016.Array.Include"
-        ]
+        ],
+        "baseUrl": "/quadtree-worklet/",
+        "paths": {
+            "@kingoftac/worklet-utilities": ["../worklet-utilites/dist/index.js"]
+        }
     },
     "include": ["src"]
 }
